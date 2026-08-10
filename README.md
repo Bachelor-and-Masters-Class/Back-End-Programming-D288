@@ -1,27 +1,115 @@
-<strong> **DO NOT DISTRIBUTE OR PUBLICLY POST SOLUTIONS TO THESE LABS. MAKE ALL FORKS OF THIS REPOSITORY WITH SOLUTION CODE PRIVATE. PLEASE REFER TO THE STUDENT CODE OF CONDUCT AND ETHICAL EXPECTATIONS FOR COLLEGE OF INFORMATION TECHNOLOGY STUDENTS FOR SPECIFICS. ** </strong>
-# WESTERN GOVERNORS UNIVERSITY 
-## D288 – BACK-END PROGRAMMING
-Welcome to Back-End Programming! This is an opportunity for students to develop object-oriented applications that can be integrated with relational databases, write code for object-oriented applications using Spring framework, and implements design patterns for object-oriented applications. 
-FOR SPECIFIC TASK INSTRUCTIONS AND REQUIREMENTS FOR THIS ASSESSMENT, PLEASE REFER TO THE COURSE PAGE.
-## BASIC INSTRUCTIONS
-For this project, you will be building your project using IntelliJ IDEA (Ultimate Edition) in a WGU-provided lab environment. You will be working with an existing MySQL database and Angular front-end, which are supplied for you in the lab environment. You will share this project to a private external GitLab repository and backup regularly. If you wish to work on it on your local machine, you will also need to download the Angular front-end application and create your own MySQL database. Use the links on your course page to install the integrated development environments (IDE), MySQL WorkBench, and IntelliJ IDEA, and pull the project from the lab environment.  
+**Overview**
 
+This repository contains my completed submission for the WGU course **D288 – Back-End Programming**.
 
-## SUPPLEMENTAL RESOURCES  
-1.	How to clone a project to IntelliJ using Git?
+The project implements the **server-side backend for a travel vacation booking platform** using Spring Boot. It models the full commerce domain — customers, vacation packages, optional excursions, shopping carts, and checkout — and exposes it through Spring Data REST endpoints backed by a relational database.
 
-> Ensure that you have Git installed on your system and that IntelliJ is installed using [Toolbox](https://www.jetbrains.com/toolbox-app/). Make sure that you are using version 2022.3.2. Once this has been confirmed, click the clone button and use the 'IntelliJ IDEA (HTTPS)' button. This will open IntelliJ with a prompt to clone the proejct. Save it in a safe location for the directory and press clone. IntelliJ will prompt you for your credentials. Enter in your WGU Credentials and the project will be cloned onto your local machine.  
+The course focus is backend engineering specifically: entity relationship modeling, repository-driven data access, transactional business logic, and API exposure. There is no front end in this repository by design; the deliverable is the service layer that a client application would consume.
 
-2. How to create a branch and start Development?
+**Scenario**
 
-- GitLab method
-> Press the '+' button located near your branch name. In the dropdown list, press the 'New branch' button. This will allow you to create a name for your branch. Once the branch has been named, you can select 'Create Branch' to push the branch to your repository.
+A travel agency needs a backend capable of supporting an online vacation booking storefront. Customers browse vacation packages, add optional excursions to those packages, place them in a cart, and complete a purchase.
 
-- IntelliJ method
-> In IntelliJ, Go to the 'Git' button on the top toolbar. Select the new branch option and create a name for the branch. Make sure checkout branch is selected and press create. You can now add a commit message and push the new branch to the local repo.
+The backend must enforce the relationships between these entities, persist orders reliably, and return a confirmation the storefront can display to the customer.
 
-## SUPPORT
-If you need additional support, please navigate to the course page and reach out to your course instructor.
-## FUTURE USE
-Take this opportunity to create or add to a simple resume portfolio to highlight and showcase your work for future use in career search, experience, and education!
+**Project Objectives**
 
+-Model the vacation booking domain as related JPA entities
+
+-Implement repository interfaces for every persisted entity
+
+-Expose repositories as REST resources through Spring Data REST
+
+-Implement a transactional checkout service that creates and persists an order
+
+-Seed reference and sample data at application startup
+
+-Configure API exposure so that entity identifiers are visible to clients
+
+**Domain Model**
+
+**Vacation and Excursion**
+A vacation package represents a bookable trip. Excursions are optional add-on activities associated with a vacation, forming a one-to-many relationship.
+
+**Customer, Country, and Division**
+Customer records are tied to a geographic division, which in turn belongs to a country, producing a normalized address hierarchy rather than duplicated location strings.
+
+**Cart and CartItem**
+A cart belongs to a customer and holds cart items. Each cart item links a vacation to the cart along with quantity and party size, allowing a single order to contain multiple bookings.
+
+**StatusType**
+An enumeration defining the lifecycle states an order can occupy, keeping status values type-safe rather than free-text.
+
+**Technical Implementation**
+
+**Repository Layer**
+CustomerRepository, VacationRepository, ExcursionRepository, CartRepository, CartItemRepository, CountryRepository, and DivisionRepository provide Spring Data access to each aggregate.
+
+**Checkout Service**
+CheckoutService and CheckoutServiceImpl encapsulate order creation. The implementation is transactional, so a failure partway through checkout rolls back rather than leaving an incomplete cart persisted.
+
+**Purchase and PurchaseResponse**
+Purchase carries the inbound order payload; PurchaseResponse returns a tracking confirmation to the client. Separating these from entities keeps the checkout contract independent of the persistence model.
+
+**Controller Layer**
+CheckoutController exposes the checkout endpoint and delegates directly to the service layer.
+
+**Configuration**
+RestDataConfig customizes Spring Data REST behavior, including exposing entity IDs in API responses so clients can reference records without additional lookups.
+
+**Data Bootstrapping**
+BootStrapData seeds countries, divisions, vacations, and excursions at startup, giving the application a usable dataset immediately on launch.
+
+**Technologies**
+
+-Java and Spring Boot
+
+-Spring Data JPA and Spring Data REST
+
+-Hibernate ORM
+
+-Maven build and dependency management
+
+-JUnit for testing
+
+**Skills Demonstrated**
+
+-Backend architecture and layered design
+
+-JPA entity modeling with one-to-many and many-to-one relationships
+
+-Repository pattern implementation
+
+-Transactional service design
+
+-REST API exposure through Spring Data REST
+
+-Enumerated type modeling for domain states
+
+-Application bootstrapping and seed data management
+
+-Maven project configuration
+
+**How to Run**
+
+```
+./mvnw spring-boot:run
+```
+
+Datasource configuration is defined in the application properties file.
+
+**Repository Contents**
+
+-`src/main/java/entities/` – JPA domain entities
+
+-`src/main/java/dao/` – Spring Data repository interfaces
+
+-`src/main/java/services/` – Checkout business logic and purchase models
+
+-`src/main/java/controllers/` – REST controller for checkout
+
+-`src/main/java/config/` – Spring Data REST configuration
+
+-`src/main/java/bootstrap/` – Startup seed data
+
+-`src/main/resources/application.properties` – Datasource and application configuration
