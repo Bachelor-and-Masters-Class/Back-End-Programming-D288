@@ -1,8 +1,8 @@
 **Overview**
 
-This repository contains my completed submission for the WGU course **D288 – Back-End Programming**.
+This repository contains my completed submission for the WGU course **D288: Back-End Programming**.
 
-The project implements the **server-side backend for a travel vacation booking platform** using Spring Boot. It models the full commerce domain — customers, vacation packages, optional excursions, shopping carts, and checkout — and exposes it through Spring Data REST endpoints backed by a relational database.
+The project implements the **server-side backend for a travel vacation booking platform** using Spring Boot. It models the full commerce domain (customers, vacation packages, optional excursions, shopping carts, and checkout) and exposes it through Spring Data REST endpoints backed by a relational database.
 
 The course focus is backend engineering specifically: entity relationship modeling, repository-driven data access, transactional business logic, and API exposure. There is no front end in this repository by design; the deliverable is the service layer that a client application would consume.
 
@@ -100,16 +100,16 @@ Datasource configuration is defined in the application properties file.
 
 **Repository Contents**
 
--`src/main/java/entities/` – JPA domain entities
+-`src/main/java/entities/`: JPA domain entities
 
--`src/main/java/dao/` – Spring Data repository interfaces
+-`src/main/java/dao/`: Spring Data repository interfaces
 
--`src/main/java/services/` – Checkout business logic and purchase models
+-`src/main/java/services/`: Checkout business logic and purchase models
 
--`src/main/java/controllers/` – REST controller for checkout
+-`src/main/java/controllers/`: REST controller for checkout
 
--`src/main/java/config/` – Spring Data REST configuration
+-`src/main/java/config/`: Spring Data REST configuration
 
--`src/main/java/bootstrap/` – Startup seed data
+-`src/main/java/bootstrap/`: Startup seed data
 
--`src/main/resources/application.properties` – Datasource and application configuration
+-`src/main/resources/application.properties`: Datasource and application configuration
